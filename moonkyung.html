@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 문경 1박 2일 가족여행 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        amber: {
+                            warm: '#fffbe8',
+                            accent: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .tab-btn.active {
+            color: #15803d;
+            border-bottom: 3px solid #15803d;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col pb-16 md:pb-6">
+
+    <!-- Top Header & Banner -->
+    <header class="bg-gradient-to-r from-emerald-800 via-green-700 to-teal-800 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-4xl mx-auto px-4 py-4 sm:px-6 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-2xl backdrop-blur-sm">
+                    <i class="fa-solid font-bold fa-tree-city text-2xl text-amber-300"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-amber-400 text-slate-900 text-xs px-2 py-0.5 rounded-full font-bold">가족여행</span>
+                        <span class="text-xs text-emerald-100">3인 (수지네)</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">문경 1박 2일 힐링 여행</h1>
+                </div>
+            </div>
+            <button onclick="toggleMemoModal()" class="bg-white/15 hover:bg-white/25 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 transition">
+                <i class="fa-regular fa-note-sticky text-amber-300"></i>
+                <span class="hidden sm:inline">체크리스트 & 메모</span>
+                <span class="sm:hidden">메모</span>
+            </button>
+        </div>
+
+        <!-- Dynamic Tabs -->
+        <div class="bg-white border-b border-slate-200">
+            <div class="max-w-4xl mx-auto px-4 flex justify-around">
+                <button id="tab-itinerary" onclick="switchTab('itinerary')" class="tab-btn active py-3.5 px-6 font-medium text-slate-500 hover:text-emerald-700 transition flex items-center gap-2 text-sm sm:text-base">
+                    <i class="fa-solid fa-route"></i> 일정 안내 (Schedule)
+                </button>
+                <button id="tab-budget" onclick="switchTab('budget')" class="tab-btn py-3.5 px-6 font-medium text-slate-500 hover:text-emerald-700 transition flex items-center gap-2 text-sm sm:text-base">
+                    <i class="fa-solid fa-wallet"></i> 여행 예산 (Budget)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full">
+
+        <!-- TAB 1: ITINERARY -->
+        <section id="section-itinerary" class="space-y-6">
+            
+            <!-- Quick Summary Card -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center shadow-sm">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-600 text-white text-xs px-2 py-0.5 rounded font-bold">핵심 동선</span>
+                        <p class="text-xs text-emerald-800 font-medium">KTX-이음 편안한 기차여행 + 여유로운 가족 템포</p>
+                    </div>
+                    <p class="text-sm text-slate-700 font-semibold">
+                        DAY 1: 문경새재 & 르무통 산책 ➔ DAY 2: 체크아웃 후 점심 ➔ 택시로 에코월드 & 아자개장터
+                    </p>
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="filterDay('all')" id="btn-day-all" class="day-filter-btn bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold flex-1 md:flex-initial text-center shadow-sm">전체 일정</button>
+                    <button onclick="filterDay(1)" id="btn-day-1" class="day-filter-btn bg-white border border-slate-300 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-medium flex-1 md:flex-initial text-center hover:bg-slate-50">DAY 1 (토)</button>
+                    <button onclick="filterDay(2)" id="btn-day-2" class="day-filter-btn bg-white border border-slate-300 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-medium flex-1 md:flex-initial text-center hover:bg-slate-50">DAY 2 (일)</button>
+                </div>
+            </div>
+
+            <!-- Suji Special Tip Banner -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-2xl shadow-sm flex items-start gap-3">
+                <div class="text-amber-500 text-xl mt-0.5">
+                    <i class="fa-solid fa-child-reaching"></i>
+                </div>
+                <div class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                    <span class="font-bold">💡 수지 컨디션 맞춤 포인트:</span> DAY 1 점심은 수지 유모차/컨디션에 맞춰 12:30~13:00 사이 탄력적으로 시작! 수지 수면 및 휴식시간(16:00~17:00)을 호텔에서 충분히 확보해 주세요.
+                </div>
+            </div>
+
+            <!-- Timeline Container -->
+            <div class="space-y-8">
+                
+                <!-- DAY 1 SECTION -->
+                <div id="day-1-group" class="schedule-day-group space-y-4">
+                    <div class="flex items-center gap-3 border-b-2 border-emerald-600 pb-2">
+                        <div class="bg-emerald-700 text-white font-bold text-sm px-3 py-1 rounded-lg shadow-sm">
+                            DAY 1
+                        </div>
+                        <h2 class="text-lg font-bold text-slate-800">문경새재 + 르무통 + 여유로운 저녁</h2>
+                        <span class="text-xs text-slate-500 hidden sm:inline">대중교통 & 도보 이동 위주</span>
+                    </div>
+
+                    <div class="relative border-l-2 border-emerald-200 ml-4 pl-6 space-y-6">
+
+                        <!-- Item 1 -->
+                        <div class="timeline-item group relative" data-title="판교역 출발">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">08:22</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-train"></i> KTX / 기차</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚂 판교역 출발</h3>
+                                <p class="text-xs text-slate-600 mt-1">설레는 문경 여행 시작! 기차 안에서 수지 간식 챙기기</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="timeline-item group relative" data-title="문경역 도착">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">09:56</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-location-dot"></i> 문경역</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚉 문경역 도착</h3>
+                                <p class="text-xs text-slate-600 mt-1">도착 후 버스 정류장 방향으로 이동 및 버스 시간 확인</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">10:10 ~ 10:30</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-bus"></i> 시내버스</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚌 문경역 ➔ 문경새재 이동</h3>
+                                <p class="text-xs text-slate-600 mt-1">10:10 버스 탑승, 약 20분 소요 (10:30 전후 문경새재 도착 예정)</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 4 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">10:30 ~ 13:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-tree"></i> 관광 / 산책</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🌳 문경새재 도립공원 관람</h3>
+                                <p class="text-xs text-slate-600 mt-1">자연 속에서 산책하며 가족 사진 남기기 (길이 완만하여 산책하기 좋음)</p>
+                                <div class="mt-2.5 p-2.5 bg-amber-50 rounded-xl text-xs text-amber-900 border border-amber-200">
+                                    <i class="fa-solid fa-utensils text-amber-600 mr-1"></i> <strong>12:30~13:00 경:</strong> 수지 컨디션에 맞춰 자율 점심 시작 가능
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 5 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">13:00 ~ 14:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-bowl-rice"></i> 점심식사</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🍚 점심 식사</h3>
+                                <p class="text-xs text-slate-600 mt-1">문경새재 부근 맛집 (약돌돼지 / 석쇠구이 / 산채비빔밥 등)</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 6 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">14:00 ~ 14:20</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-person-walking"></i> 도보 20분</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚶 식당 ➔ 르무통 카페 도보 이동</h3>
+                                <p class="text-xs text-slate-600 mt-1">식후 여유롭게 바람 쐬며 산책하듯 이동</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 7 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">14:30 ~ 15:30</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-mug-hot"></i> 카페</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">☕ 카페 르무통 (Le Mouton)</h3>
+                                <p class="text-xs text-slate-600 mt-1">예쁜 분위기에서 커피타임 및 달콤한 디저트 타임 (3인 예약/방문)</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 8 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">15:30 ~ 17:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-hotel"></i> 호텔 / 휴식</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🏨 페트로호텔 체크인 & 충전 휴식</h3>
+                                <p class="text-xs text-slate-600 mt-1">15:30~16:00 이동 후 체크인 ➔ 16:00~17:00 수지 낮잠 & 가족 휴식시간</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 9 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">17:00 ~ 19:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-utensils"></i> 저녁 & 카페</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🍚 맛있는 저녁식사 ➔ ☕ 2차 카페 타임</h3>
+                                <p class="text-xs text-slate-600 mt-1">17:00~18:00 든든한 저녁 / 18:00~19:00 분위기 좋은 야간 카페 산책</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 10 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">19:00 ~</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-moon"></i> 일과 종료</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🛏️ 페트로호텔 복귀 & 푹 쉬기</h3>
+                                <p class="text-xs text-slate-600 mt-1">DAY 1 마무리, 따뜻한 씻기 후 푹 자기</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- DAY 2 SECTION -->
+                <div id="day-2-group" class="schedule-day-group space-y-4">
+                    <div class="flex items-center gap-3 border-b-2 border-teal-600 pb-2 mt-8">
+                        <div class="bg-teal-700 text-white font-bold text-sm px-3 py-1 rounded-lg shadow-sm">
+                            DAY 2
+                        </div>
+                        <h2 class="text-lg font-bold text-slate-800">에코월드 + 가은아자개장터 + 판교 복귀</h2>
+                        <span class="text-xs text-slate-500 hidden sm:inline">체크아웃 ➔ 점심 ➔ 택시 이동</span>
+                    </div>
+
+                    <div class="relative border-l-2 border-teal-200 ml-4 pl-6 space-y-6">
+
+                        <!-- Item 1 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">~ 11:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-bed"></i> 아침 모닝</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">😴 늦잠 & 느긋한 아침 준비 ➔ 🏨 11:00 체크아웃</h3>
+                                <p class="text-xs text-slate-600 mt-1">~09:30 늦잠 ➔ 09:30~10:30 아침식사 & 외출 준비 ➔ 10:30~11:00 짐 정돈 후 체크아웃</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">11:00 ~ 12:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-utensils"></i> 점심식사</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🍚 든든한 점심 식사</h3>
+                                <p class="text-xs text-slate-600 mt-1">DAY 2 출발 전 호텔 근처/이동 동선상에서 편안한 식사</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">12:00 ~ 13:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-yellow-50 text-yellow-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-taxi"></i> 택시 이동</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚕 택시로 문경 에코월드 이동</h3>
+                                <p class="text-xs text-slate-600 mt-1">짐과 아이를 고려해 택시로 편안하게 이동 (13:00 에코월드 도착 예정)</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 4 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">13:00 ~ 17:00</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-sky-50 text-sky-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-ferris-wheel"></i> 에코월드</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🎠 문경 에코월드 신나는 체험</h3>
+                                <p class="text-xs text-slate-600 mt-1">거미열차, 가은세트장, 에코타운 등 4시간 동안 즐거운 추억 쌓기</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 5 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">17:00 ~ 18:20</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-store"></i> 전통시장</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🏮 가은아자개장터 구경 & 저녁식사</h3>
+                                <p class="text-xs text-slate-600 mt-1">17:00~17:10 시장 이동 ➔ 시장 구경 및 전통 특산물/저녁 식사 즐기기</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 6 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">18:20 ~ 18:45</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-bus"></i> 218번 버스</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚌 218번 버스 타고 문경역으로!</h3>
+                                <p class="text-xs text-slate-600 mt-1">18:20 정류장 이동 ➔ 18:30 탑승 ➔ 18:45 문경역 안전 도착</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 7 -->
+                        <div class="timeline-item group relative">
+                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow"></div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 hover:border-teal-300 transition">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md">18:55 ~ 20:26</span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-house"></i> 귀가</span>
+                                    </div>
+                                    <input type="checkbox" onchange="toggleCheck(this)" class="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                </div>
+                                <h3 class="font-bold text-slate-800 mt-2 text-base">🚂 KTX-이음 738 ➔ 🏠 판교역 도착</h3>
+                                <p class="text-xs text-slate-600 mt-1">18:55 문경역 출발 ➔ 20:26 판교역 집 도착! 행복했던 가족여행 완료 ❤️</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- TAB 2: BUDGET -->
+        <section id="section-budget" class="hidden space-y-6">
+            
+            <!-- Key Metric Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">총 지출 예상/확정</span>
+                    <p id="total-budget-display" class="text-xl sm:text-2xl font-black text-emerald-700 mt-1">0원</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">1인당 부담 (3인)</span>
+                    <p id="per-person-display" class="text-xl sm:text-2xl font-black text-slate-800 mt-1">0원</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">숙박 비율</span>
+                    <p id="hotel-ratio-display" class="text-xl sm:text-2xl font-black text-blue-600 mt-1">0%</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">등록 항목 수</span>
+                    <p id="item-count-display" class="text-xl sm:text-2xl font-black text-amber-600 mt-1">0개</p>
+                </div>
+            </div>
+
+            <!-- Visual Chart & Category Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Doughnut Chart Card -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center">
+                    <h3 class="text-sm font-bold text-slate-700 w-full mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-emerald-600"></i> 카테고리별 지출 비중
+                    </h3>
+                    <div class="w-56 h-56 relative flex items-center justify-center">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Add New Expense Quick Form -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-emerald-600"></i> 지출 항목 추가하기
+                    </h3>
+                    
+                    <form id="add-expense-form" onsubmit="handleAddExpense(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">항목 이름</label>
+                            <input type="text" id="input-title" placeholder="예: 첫날 점심, 택시비" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">금액 (원)</label>
+                                <input type="number" id="input-amount" placeholder="30000" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">분류</label>
+                                <select id="input-category" class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="숙박">🏨 숙박</option>
+                                    <option value="교통">🚂 교통</option>
+                                    <option value="식비/카페">🍚 식비/카페</option>
+                                    <option value="입장료/관광">🎠 입장료/관광</option>
+                                    <option value="기타">🛒 기타</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm py-2.5 rounded-xl transition shadow">
+                            + 항목 추가
+                        </button>
+                    </form>
+                    <p class="text-xs text-slate-400 text-center">기본 제공된 3개 주요 항목(호텔, 기차, 르무통)에 직접 추가해보세요!</p>
+                </div>
+            </div>
+
+            <!-- Expense Detail Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-600"></i> 상세 예산 리스트
+                    </h3>
+                    <button onclick="resetBudgetToDefault()" class="text-xs text-slate-500 hover:text-rose-600 underline">
+                        초기화
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-semibold">
+                            <tr>
+                                <th class="p-3">항목</th>
+                                <th class="p-3">분류</th>
+                                <th class="p-3 text-right">금액</th>
+                                <th class="p-3 text-center">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budget-table-body" class="divide-y divide-slate-100">
+                            <!-- Dynamically Generated Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Checklist / Memo Modal -->
+    <div id="memo-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-emerald-600"></i> 가족 여행 준비 체크리스트
+                </h3>
+                <button onclick="toggleMemoModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-1" id="checklist-items">
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">KTX 승차권 예매 내역 확인</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">페트로호텔 예약 바우처</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">수지 상비약 & 체온계</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">수지 간식 & 보온병 water</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">휴대용 유모차 / 아기띠</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 text-emerald-600 rounded border-slate-300">
+                    <span class="text-sm text-slate-700">스마트폰 충전기 & 보조배터리</span>
+                </label>
+            </div>
+
+            <div class="pt-2">
+                <button onclick="toggleMemoModal()" class="w-full bg-slate-800 text-white font-bold text-sm py-2.5 rounded-xl hover:bg-slate-900 transition">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Box -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-lg opacity-0 transition duration-300 pointer-events-none z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">알림 메시지</span>
+    </div>
+
+    <script>
+        // Default initial budget data provided by user
+        const initialBudgetData = [
+            { id: 1, title: '페트로호텔 숙박', amount: 224565, category: '숙박' },
+            { id: 2, title: '왕복 기차표 (KTX)', amount: 109600, category: '교통' },
+            { id: 3, title: '르무통 카페 (3인)', amount: 14700, category: '식비/카페' },
+            { id: 4, title: 'DAY 1 식비 (예상)', amount: 60000, category: '식비/카페' },
+            { id: 5, title: 'DAY 2 점심/저녁 (예상)', amount: 70000, category: '식비/카페' },
+            { id: 6, title: '문경 에코월드 입장료 (예상)', amount: 30000, category: '입장료/관광' },
+            { id: 7, title: 'DAY 2 택시비 (예상)', amount: 15000, category: '교통' }
+        ];
+
+        let budgetData = JSON.parse(JSON.stringify(initialBudgetData));
+        let myChart = null;
+
+        // Tab Switching
+        function switchTab(tab) {
+            const itineraryTab = document.getElementById('tab-itinerary');
+            const budgetTab = document.getElementById('tab-budget');
+            const itinerarySec = document.getElementById('section-itinerary');
+            const budgetSec = document.getElementById('section-budget');
+
+            if (tab === 'itinerary') {
+                itineraryTab.classList.add('active');
+                budgetTab.classList.remove('active');
+                itinerarySec.classList.remove('hidden');
+                budgetSec.classList.add('hidden');
+            } else {
+                budgetTab.classList.add('active');
+                itineraryTab.classList.remove('active');
+                budgetSec.classList.remove('hidden');
+                itinerarySec.classList.add('hidden');
+                renderBudget(); // Re-render chart and table
+            }
+        }
+
+        // Day Filtering in Itinerary
+        function filterDay(day) {
+            const day1Group = document.getElementById('day-1-group');
+            const day2Group = document.getElementById('day-2-group');
+
+            const btnAll = document.getElementById('btn-day-all');
+            const btn1 = document.getElementById('btn-day-1');
+            const btn2 = document.getElementById('btn-day-2');
+
+            // Reset buttons
+            [btnAll, btn1, btn2].forEach(btn => {
+                btn.className = "day-filter-btn bg-white border border-slate-300 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-medium flex-1 md:flex-initial text-center hover:bg-slate-50";
+            });
+
+            if (day === 'all') {
+                day1Group.style.display = 'block';
+                day2Group.style.display = 'block';
+                btnAll.className = "day-filter-btn bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold flex-1 md:flex-initial text-center shadow-sm";
+            } else if (day === 1) {
+                day1Group.style.display = 'block';
+                day2Group.style.display = 'none';
+                btn1.className = "day-filter-btn bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold flex-1 md:flex-initial text-center shadow-sm";
+            } else if (day === 2) {
+                day1Group.style.display = 'none';
+                day2Group.style.display = 'block';
+                btn2.className = "day-filter-btn bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold flex-1 md:flex-initial text-center shadow-sm";
+            }
+        }
+
+        // Checklist Checkbox visual toggle
+        function toggleCheck(checkbox) {
+            const card = checkbox.closest('.timeline-item').querySelector('.bg-white');
+            if (checkbox.checked) {
+                card.classList.add('opacity-50', 'bg-slate-100');
+                showToast('일정을 완료 처리했습니다!');
+            } else {
+                card.classList.remove('opacity-50', 'bg-slate-100');
+            }
+        }
+
+        // Modal Toggle
+        function toggleMemoModal() {
+            const modal = document.getElementById('memo-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Budget Calculations and Render
+        function renderBudget() {
+            const tbody = document.getElementById('budget-table-body');
+            tbody.innerHTML = '';
+
+            let total = 0;
+            const categorySums = {
+                '숙박': 0,
+                '교통': 0,
+                '식비/카페': 0,
+                '입장료/관광': 0,
+                '기타': 0
+            };
+
+            budgetData.forEach(item => {
+                total += item.amount;
+                if (categorySums[item.category] !== undefined) {
+                    categorySums[item.category] += item.amount;
+                } else {
+                    categorySums['기타'] += item.amount;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-800">${item.title}</td>
+                    <td class="p-3"><span class="text-xs bg-slate-100 px-2 py-1 rounded-md text-slate-600 font-medium">${item.category}</span></td>
+                    <td class="p-3 text-right font-bold text-slate-700">${item.amount.toLocaleString()}원</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteBudget(${item.id})" class="text-slate-400 hover:text-rose-500 transition px-2 py-1">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update Metrics
+            document.getElementById('total-budget-display').innerText = total.toLocaleString() + '원';
+            document.getElementById('per-person-display').innerText = Math.round(total / 3).toLocaleString() + '원';
+            document.getElementById('item-count-display').innerText = budgetData.length + '개';
+
+            const hotelRatio = total > 0 ? Math.round((categorySums['숙박'] / total) * 100) : 0;
+            document.getElementById('hotel-ratio-display').innerText = hotelRatio + '%';
+
+            // Chart Render
+            updateChart(categorySums);
+        }
+
+        function updateChart(categorySums) {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            const labels = Object.keys(categorySums);
+            const data = Object.values(categorySums);
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#3b82f6', // 숙박 (Blue)
+                            '#eab308', // 교통 (Yellow)
+                            '#22c55e', // 식비/카페 (Green)
+                            '#06b6d4', // 입장료/관광 (Cyan)
+                            '#94a3b8'  // 기타 (Slate)
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 10, family: 'Pretendard' },
+                                boxWidth: 12
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // Add Expense Function
+        function handleAddExpense(event) {
+            event.preventDefault();
+            const titleInput = document.getElementById('input-title');
+            const amountInput = document.getElementById('input-amount');
+            const categoryInput = document.getElementById('input-category');
+
+            const title = titleInput.value.trim();
+            const amount = parseInt(amountInput.value);
+            const category = categoryInput.value;
+
+            if (!title || isNaN(amount) || amount <= 0) return;
+
+            const newItem = {
+                id: Date.now(),
+                title: title,
+                amount: amount,
+                category: category
+            };
+
+            budgetData.push(newItem);
+            renderBudget();
+
+            titleInput.value = '';
+            amountInput.value = '';
+
+            showToast('새 지출 항목이 추가되었습니다!');
+        }
+
+        // Delete Budget Item
+        function deleteBudget(id) {
+            budgetData = budgetData.filter(item => item.id !== id);
+            renderBudget();
+            showToast('항목이 삭제되었습니다.');
+        }
+
+        // Reset Budget
+        function resetBudgetToDefault() {
+            budgetData = JSON.parse(JSON.stringify(initialBudgetData));
+            renderBudget();
+            showToast('예산 목록이 초기화되었습니다.');
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2000);
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            renderBudget();
+        };
+    </script>
+</body>
+</html>
